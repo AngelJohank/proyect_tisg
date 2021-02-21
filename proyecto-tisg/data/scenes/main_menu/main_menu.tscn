@@ -1,0 +1,72 @@
+[gd_scene load_steps=10 format=2]
+
+[ext_resource path="res://data/scenes/main_menu/configuration.tscn" type="PackedScene" id=1]
+[ext_resource path="res://data/scenes/main_menu/scripts/main_menu.gd" type="Script" id=2]
+[ext_resource path="res://data/assets/GUI/confbutton.png" type="Texture" id=3]
+[ext_resource path="res://data/scenes/main_menu/scripts/main_menu_audio.gd" type="Script" id=4]
+[ext_resource path="res://data/assets/audio/interface/background.wav" type="AudioStream" id=5]
+[ext_resource path="res://data/assets/GUI/background spritesheet.png" type="Texture" id=7]
+[ext_resource path="res://data/assets/audio/interface/GUI_Select.wav" type="AudioStream" id=8]
+[ext_resource path="res://data/assets/GUI/anybutton.png" type="Texture" id=9]
+
+[sub_resource type="Animation" id=1]
+resource_name = "main"
+length = 1.2
+loop = true
+step = 0.5
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.2, 0.4, 0.6, 0.8, 1 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 0, 1, 2, 3, 4, 5 ]
+}
+
+[node name="main_menu" type="Node2D"]
+script = ExtResource( 2 )
+
+[node name="background" type="Sprite" parent="."]
+position = Vector2( 400, 300 )
+scale = Vector2( 7.99333, 7.99333 )
+texture = ExtResource( 7 )
+hframes = 6
+
+[node name="background_animation" type="AnimationPlayer" parent="background"]
+anims/main = SubResource( 1 )
+
+[node name="text" type="Sprite" parent="."]
+position = Vector2( 400, 554 )
+texture = ExtResource( 9 )
+vframes = 2
+
+[node name="config_button" type="TextureButton" parent="."]
+margin_left = 726.0
+margin_top = 523.0
+margin_right = 779.0
+margin_bottom = 576.0
+texture_normal = ExtResource( 3 )
+expand = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="configuration" parent="." instance=ExtResource( 1 )]
+visible = false
+
+[node name="select_audio" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 8 )
+volume_db = -8.0
+script = ExtResource( 4 )
+
+[node name="background_audio" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 5 )
+volume_db = 3.0
+autoplay = true
+[connection signal="pressed" from="config_button" to="select_audio" method="_on_config_button_pressed"]
+[connection signal="pressed" from="config_button" to="." method="_on_config_button_pressed"]
+[connection signal="finished" from="background_audio" to="." method="_on_background_audio_finished"]
